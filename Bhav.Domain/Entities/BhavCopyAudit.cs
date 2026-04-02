@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Bhav.Infrastructure.Persistence.Entities;
+namespace Bhav.Domain.Entities;
 
 public partial class BhavCopyAudit
 {
@@ -16,6 +16,8 @@ public partial class BhavCopyAudit
     public string NewValues { get; set; }
 
     public string ChangedBy { get; set; }
+
+    public decimal TradedValue { get; set; }
 
     public DateTime? ChangedAt { get; set; }
 

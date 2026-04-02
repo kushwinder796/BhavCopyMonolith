@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Margin.Infrastructure.Persistence.Entities;
+namespace Margin.Domain.Entities;
 
 public partial class MarginDetail
 {

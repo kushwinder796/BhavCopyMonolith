@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Bhav.Domain.Entities;
 
-namespace Bhav.Infrastructure.Persistence.Entities;
+namespace Bhav.Infrastructure.Persistence;
 
 public partial class BhavDbContext : DbContext
 {
@@ -59,6 +60,12 @@ public partial class BhavDbContext : DbContext
             entity.Property(e => e.OpenPrice)
                 .HasPrecision(10, 2)
                 .HasColumnName("open_price");
+            entity.Property(e => e.SecurityCode)
+                .HasMaxLength(50)
+                .HasColumnName("security_code");
+            entity.Property(e => e.SecurityName)
+                .HasMaxLength(150)
+                .HasColumnName("security_name");
             entity.Property(e => e.Symbol)
                 .IsRequired()
                 .HasMaxLength(10)

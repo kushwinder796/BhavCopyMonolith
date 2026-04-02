@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Margin.Domain.Entities;
 
-namespace Margin.Infrastructure.Persistence.Entities;
+namespace Margin.Infrastructure.Persistence;
 
 public partial class MarginDbContext : DbContext
 {
