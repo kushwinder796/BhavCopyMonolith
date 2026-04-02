@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Command\CommandHandler\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="IRepositories\" />
+    <Folder Include="Services\" />
+    <Folder Include="Queries\QueriesHandler\" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MediatR" Version="14.0.0" />
+	</ItemGroup>
+
+
+</Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\Modules\BhavModule\BhavModule.csproj" />
+    <ProjectReference Include="..\Modules\MarginModule\MarginModule.csproj" />
+    <ProjectReference Include="..\Modules\ReportModule\ReportModule.csproj" />
+  </ItemGroup>
+
+</Project>
