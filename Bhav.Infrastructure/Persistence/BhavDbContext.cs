@@ -1,9 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Bhav.Domain.Entities;
 
-namespace Bhav.Infrastructure.Persistence;
+namespace Bhav.Infrastructure.Persistence.Entities;
 
 public partial class BhavDbContext : DbContext
 {
@@ -67,10 +66,10 @@ public partial class BhavDbContext : DbContext
                 .HasMaxLength(150)
                 .HasColumnName("security_name");
             entity.Property(e => e.Symbol)
-                .IsRequired()
                 .HasMaxLength(10)
                 .HasColumnName("symbol");
             entity.Property(e => e.TradeDate).HasColumnName("trade_date");
+            entity.Property(e => e.TradedValue).HasPrecision(18, 2);
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");

@@ -24,25 +24,7 @@ namespace BhavCopyProject.Controllers
             _logger = logger;
         }
 
-        //[HttpPost("upload")]
-        //public async Task<IActionResult> UploadBhavCopy([FromForm] IFormFile file, CancellationToken cancellationToken)
-        //{
-        //    try
-        //    {
-        //        var command = new UploadBhavCopyCommand { File = file };
-        //        var result = await _mediator.Send(command, cancellationToken);
-
-        //        if (result.Success)
-        //            return Ok(result);
-        //        else
-        //            return BadRequest(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Upload error: {ex.Message}");
-        //        return StatusCode(500, new { message = "Upload failed", error = ex.Message });
-        //    }
-        //}
+  
 
         [HttpPost("upload")]
         [Consumes("multipart/form-data")]
@@ -87,7 +69,7 @@ namespace BhavCopyProject.Controllers
             [FromQuery] string symbol = "",
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 20,
-            CancellationToken cancellationToken = default)
+            CancellationToken ct = default)
         {
             try
             {
@@ -106,7 +88,7 @@ namespace BhavCopyProject.Controllers
                     symbol: symbol,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: ct);
 
                 return Ok(new
                 {
@@ -138,16 +120,14 @@ namespace BhavCopyProject.Controllers
 
 
         [HttpGet("symbols/{date}")]
-        public async Task<IActionResult> GetSymbolsByDate(
-            string date,
-            CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetSymbolsByDate( string date,CancellationToken ct = default)
         {
             try
             {
                 if (!DateTime.TryParse(date, out var parsedDate))
                     return BadRequest(new { message = "Invalid date format. Use yyyy-MM-dd" });
 
-                var symbols = await _repository.GetSymbolsByDateAsync(parsedDate, cancellationToken);
+                var symbols = await _repository.GetSymbolsByDateAsync(parsedDate, ct);
                 return Ok(new { totalSymbols = symbols.Count, symbols });
             }
             catch (Exception ex)

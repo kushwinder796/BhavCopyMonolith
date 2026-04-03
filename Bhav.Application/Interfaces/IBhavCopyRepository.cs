@@ -1,6 +1,6 @@
 ﻿
 
-using Bhav.Domain.Entities;
+using Bhav.Infrastructure.Persistence.Entities;
 
 namespace Bhav.Application.IRepositories
 {

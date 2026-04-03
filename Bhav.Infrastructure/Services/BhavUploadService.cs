@@ -1,8 +1,7 @@
-﻿
-using Bhav.Application.DTOs;
+﻿using Bhav.Application.DTOs;
 using Bhav.Application.IRepositories;
 using Bhav.Application.Services;
-using Bhav.Domain.Entities;
+using Bhav.Infrastructure.Persistence.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace Bhav.Infrastructure.Services
@@ -34,58 +33,51 @@ namespace Bhav.Infrastructure.Services
 
                 foreach (var raw in parsedData)
                 {
-                    // Handle nullable TradeDate
                     if (!raw.TradeDate.HasValue)
                     {
                         skippedCount++;
-                        _logger.LogWarning($"Record skipped: {raw.SecurityCode} - no trade date");
+                        _logger.LogWarning("Record skipped: {Symbol} - no trade date", raw.SecurityCode);
                         continue;
                     }
 
-                    var tradeDate = raw.TradeDate.Value;
+                  
+                    var tradeDate = DateTime.SpecifyKind(raw.TradeDate.Value, DateTimeKind.Utc);
 
-                    // Check if record already exists (using DateTime comparison)
-                    var exists = await _repository.ExistsAsync(raw.SecurityCode,tradeDate, cancellationToken);
+                    var exists = await _repository.ExistsAsync(raw.SecurityCode, tradeDate, cancellationToken);
                     if (exists)
                     {
                         skippedCount++;
-                        _logger.LogWarning($"Record already exists: {raw.SecurityCode} on {tradeDate:yyyy-MM-dd}");
+                        _logger.LogWarning("Duplicate skipped: {Symbol} on {Date}", raw.SecurityCode, tradeDate.ToString("yyyy-MM-dd"));
                         continue;
                     }
 
                     bhavRecords.Add(new BhavCopy
                     {
-                        
                         Symbol = raw.SecurityCode,
                         SecurityName = raw.SecurityName,
                         OpenPrice = raw.OpenPrice,
                         HighPrice = raw.HighPrice,
                         LowPrice = raw.LowPrice,
                         ClosePrice = raw.ClosePrice,
-                        Volume = raw.Volume,
+                        Volume = (int?)raw.Volume,
                         TradedValue = raw.TradedValue,
-                        TradeDate = tradeDate,
-                        CreatedAt = DateTime.UtcNow,
+                        TradeDate = tradeDate,                    
+                        CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),         
                         IsActive = true
                     });
                 }
 
                 if (bhavRecords.Count == 0)
-                {
                     return new UploadResultDto
                     {
                         Success = false,
-                        Message = $"All {skippedCount} records skipped (duplicates or invalid)"
+                        Message = $"All {skippedCount} records skipped (duplicates or missing date)"
                     };
-                }
 
-                // Add to repository
                 await _repository.AddRangeAsync(bhavRecords, cancellationToken);
-
-                // Save changes
                 var recordsAffected = await _repository.SaveChangesAsync(cancellationToken);
 
-                _logger.LogInformation($"Successfully uploaded {recordsAffected} BHAV records (Skipped: {skippedCount})");
+                _logger.LogInformation("Uploaded {Count} records. Skipped: {Skipped}", recordsAffected, skippedCount);
 
                 return new UploadResultDto
                 {
@@ -96,7 +88,7 @@ namespace Bhav.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"BHAV upload failed: {ex.Message}");
+                _logger.LogError(ex, "BHAV upload failed");
                 return new UploadResultDto
                 {
                     Success = false,

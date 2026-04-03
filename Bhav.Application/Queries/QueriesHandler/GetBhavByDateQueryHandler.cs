@@ -1,5 +1,4 @@
-﻿// Path: Modules/Bhav/Bhav.Application/Queries/GetBhavByDateQueryHandler.cs
-
+﻿
 using Bhav.Application.DTOs;
 using Bhav.Application.IRepositories;
 using MediatR;
@@ -17,7 +16,7 @@ namespace Bhav.Application.Queries
 
         public async Task<GetBhavByDateQueryResponse> Handle(GetBhavByDateQuery query, CancellationToken cancellationToken)
         {
-            // CORRECT: Proper tuple deconstruction with explicit types
+           
             var result = await _context.GetPaginatedAsync(
                 fromDate: query.Date.Date,
                 toDate: query.Date.Date,

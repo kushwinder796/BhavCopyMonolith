@@ -1,8 +1,7 @@
-﻿// Path: Modules/Bhav/Bhav.Infrastructure/Repositories/BhavCopyRepository.cs
+﻿
 
 using Bhav.Application.IRepositories;
-using Bhav.Domain.Entities;
-using Bhav.Infrastructure.Persistence;
+using Bhav.Infrastructure.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bhav.Infrastructure.Repositories
@@ -13,24 +12,24 @@ namespace Bhav.Infrastructure.Repositories
 
         public BhavCopyRepository(BhavDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context;
         }
 
-        public async Task<List<string>> GetSymbolsByDateAsync(DateTime date, CancellationToken cancellationToken = default)
+        public async Task<List<string>> GetSymbolsByDateAsync(DateTime date, CancellationToken ct = default)
         {
             return await _context.BhavCopies
                 .Where(x => x.TradeDate.HasValue && x.TradeDate.Value.Date == date.Date && x.IsActive == true)
                 .Select(x => x.Symbol)
                 .Distinct()
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
         }
 
-        public async Task AddRangeAsync(IEnumerable<BhavCopy> records, CancellationToken cancellationToken = default)
+        public async Task AddRangeAsync(IEnumerable<BhavCopy> records, CancellationToken ct = default)
         {
             if (records == null || !records.Any())
                 throw new ArgumentException("Records cannot be null or empty", nameof(records));
 
-            await _context.BhavCopies.AddRangeAsync(records, cancellationToken);
+            await _context.BhavCopies.AddRangeAsync(records, ct);
         }
 
         public async Task<bool> ExistsAsync(string symbol, DateTime tradeDate, CancellationToken cancellationToken = default)
@@ -46,7 +45,7 @@ namespace Bhav.Infrastructure.Repositories
                     cancellationToken);
         }
 
-        public async Task<List<BhavCopy>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default)
+        public async Task<List<BhavCopy>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate, CancellationToken ct = default)
         {
             if (fromDate > toDate)
                 throw new ArgumentException("FromDate cannot be greater than ToDate");
@@ -58,7 +57,7 @@ namespace Bhav.Infrastructure.Repositories
                     && x.IsActive == true)
                 .OrderByDescending(x => x.TradeDate)
                 .ThenBy(x => x.Symbol)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
         }
 
         public async Task<BhavCopy> GetBySymbolAndDateAsync(string symbol, DateTime tradeDate, CancellationToken cancellationToken = default)
@@ -105,9 +104,9 @@ namespace Bhav.Infrastructure.Repositories
             return (records, totalCount); 
         }
 
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(CancellationToken ct = default)
         {
-            return await _context.SaveChangesAsync(cancellationToken);
+            return await _context.SaveChangesAsync(ct);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Bhav.Application.Services
 {
     public interface IBhavCopyParserService
     {
-        Task<List<BhavCopyRaw>> ParseBhavCopyAsync(Stream csvStream, CancellationToken cancellationToken = default);
+        Task<List<BhavCopyRaw>> ParseBhavCopyAsync(Stream csvStream, DateTime tradeDate, CancellationToken cancellationToken = default);
     }
 }

@@ -2,6 +2,7 @@ using Bhav.Application.Command;
 using Bhav.Application.IRepositories;
 using Bhav.Application.Services;
 using Bhav.Infrastructure.Persistence;
+using Bhav.Infrastructure.Persistence.Entities;
 using Bhav.Infrastructure.Repositories;
 using Bhav.Infrastructure.Services;
 using Margin.Infrastructure.Persistence;
@@ -11,6 +12,7 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddControllers();
 
