@@ -18,6 +18,4 @@ public partial class BhavCopyAudit
     public string? ChangedBy { get; set; }
 
     public DateTime? ChangedAt { get; set; }
-
-    public virtual BhavCopy BhavCopy { get; set; } = null!;
 }

@@ -31,49 +31,24 @@ public partial class BhavDbContext : DbContext
 
             entity.ToTable("bhav_copies", "bhav");
 
-            entity.HasIndex(e => new { e.Symbol, e.TradeDate }, "uq_bhav_symbol_date").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ClosePrice)
-                .HasPrecision(10, 2)
-                .HasColumnName("close_price");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
-            entity.Property(e => e.CreatedBy)
-                .HasMaxLength(100)
-                .HasColumnName("created_by");
-            entity.Property(e => e.HighPrice)
-                .HasPrecision(10, 2)
-                .HasColumnName("high_price");
-            entity.Property(e => e.IsActive)
-                .HasDefaultValue(true)
-                .HasColumnName("is_active");
-            entity.Property(e => e.LowPrice)
-                .HasPrecision(10, 2)
-                .HasColumnName("low_price");
-            entity.Property(e => e.OpenInterest)
-                .HasPrecision(15, 2)
-                .HasColumnName("open_interest");
-            entity.Property(e => e.OpenPrice)
-                .HasPrecision(10, 2)
-                .HasColumnName("open_price");
-            entity.Property(e => e.SecurityCode)
-                .HasMaxLength(50)
-                .HasColumnName("security_code");
-            entity.Property(e => e.SecurityName)
-                .HasMaxLength(150)
-                .HasColumnName("security_name");
-            entity.Property(e => e.Symbol)
+            entity.Property(e => e.Data)
+                .HasColumnType("jsonb")
+                .HasColumnName("data");
+            entity.Property(e => e.Exchange)
                 .HasMaxLength(10)
+                .HasColumnName("exchange");
+            entity.Property(e => e.Segment)
+                .HasMaxLength(10)
+                .HasColumnName("segment");
+            entity.Property(e => e.Symbol)
+                .HasMaxLength(50)
                 .HasColumnName("symbol");
             entity.Property(e => e.TradeDate).HasColumnName("trade_date");
-            entity.Property(e => e.TradedValue).HasPrecision(18, 2);
-            entity.Property(e => e.UpdatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("updated_at");
-            entity.Property(e => e.Volume).HasColumnName("volume");
         });
 
         modelBuilder.Entity<BhavCopyAudit>(entity =>
@@ -100,10 +75,6 @@ public partial class BhavDbContext : DbContext
             entity.Property(e => e.Operation)
                 .HasMaxLength(20)
                 .HasColumnName("operation");
-
-            entity.HasOne(d => d.BhavCopy).WithMany(p => p.BhavCopyAudits)
-                .HasForeignKey(d => d.BhavCopyId)
-                .HasConstraintName("fk_bhav_audit");
         });
 
         OnModelCreatingPartial(modelBuilder);
