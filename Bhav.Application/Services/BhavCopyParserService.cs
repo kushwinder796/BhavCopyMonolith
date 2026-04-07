@@ -69,7 +69,7 @@ namespace Bhav.Application.Services
 
                 var values = ParseCsvLine(line);
 
-                // Skip if not enough values
+               
                 if (values.Length == 0)
                     continue;
 

@@ -11,6 +11,7 @@ namespace Bhav.Application.IRepositories
         Task AddRangeAsync(List<BhavCopy> Data);
 
         Task<List<BhavCopy>> GetByDateAsync(DateOnly date);
+
         Task<byte[]?> DownloadAsync(string url);
       
 

@@ -17,12 +17,12 @@ namespace Bhav.Infrastructure.Repositories
         }
 
 
-        public async Task<List<string>> GetSymbolsByDateAsync(DateOnly date, CancellationToken cancellationToken = default)
+        public async Task<List<string>> GetSymbolsByDateAsync(DateOnly date, CancellationToken  ct = default)
         {
             return await _context.BhavCopies
                 .Where(x => x.TradeDate == date)
                 .Select(x => x.Symbol!)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
         }
 
 
